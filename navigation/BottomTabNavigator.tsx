@@ -7,11 +7,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
+import { View, Text, ScrollView } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
+import TracksScreen from '../screens/TracksScreen';
+
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -21,20 +24,26 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="Home"
+        component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home-outline" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Search"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Your Library"
+        component={TabOneNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="library-outline" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -52,12 +61,44 @@ function TabBarIcon(props: { name: React.ComponentProps<typeof Ionicons>['name']
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
 function TabOneNavigator() {
+  const colorScheme = useColorScheme();
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
-        name="TabOneScreen"
+        name="Your Library"
         component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        options={{  
+          headerTitle: "Your Library",
+          headerLeft: (props) => (
+            <View style={{ paddingLeft: 10, paddingBottom: 10, }}>
+              <View style={{ height: 35, width: 35, borderRadius: 30, backgroundColor: Colors[colorScheme].tint }} />
+            </View>
+          ),
+          headerRight: (props) => (
+            <View style={{ paddingRight: 15, display: 'flex', flexDirection: 'row',  }}>
+              <Ionicons name="search" size={18} color="white" style={{marginRight: 15, marginTop: 3 }} />
+              <Ionicons name="add" size={24} color="white" />
+            </View>
+          ),
+        }}
+      />
+      <TabOneStack.Screen
+        name="Tracks Screen"
+        component={TracksScreen}
+        options={{  
+          headerTitle: "Tracks",
+          headerLeft: (props) => (
+            <View style={{ paddingLeft: 10, paddingBottom: 10, }}>
+              <View style={{ height: 35, width: 35, borderRadius: 30, backgroundColor: Colors[colorScheme].tint }} />
+            </View>
+          ),
+          headerRight: (props) => (
+            <View style={{ paddingRight: 15, display: 'flex', flexDirection: 'row',  }}>
+              <Ionicons name="search" size={18} color="white" style={{marginRight: 15, marginTop: 3 }} />
+              <Ionicons name="add" size={24} color="white" />
+            </View>
+          ),
+        }}
       />
     </TabOneStack.Navigator>
   );
@@ -71,7 +112,7 @@ function TabTwoNavigator() {
       <TabTwoStack.Screen
         name="TabTwoScreen"
         component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{ headerTitle: 'Search' }}
       />
     </TabTwoStack.Navigator>
   );
